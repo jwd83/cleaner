@@ -343,7 +343,7 @@
           if (!isImageMode) return null;
 
           // Canonical: force tbm=isch since it's the most stable
-          return `https://${u.hostname}/search?tbm=isch&q=${encodeURIComponent(
+          return `https://${u.hostname}/search?udm=2&q=${encodeURIComponent(
             q
           )}`;
         }
