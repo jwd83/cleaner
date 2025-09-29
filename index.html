@@ -327,19 +327,25 @@
         }
 
         function cleanGoogleImages(u) {
-          // For images we want tbm=isch + q
+          // Only handle /search links
           if (!u.pathname.startsWith("/search")) return null;
+
           const params = new URLSearchParams(u.search);
-          const tbm = params.get("tbm");
           const q = params.get("q");
           if (!q) return null;
-          if (tbm && tbm.toLowerCase() === "isch") {
-            return `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(
-              safeDecode(q)
-            )}`;
-          }
-          // also: images.google.com/search?... treat as images if tbm=isch present
-          return null;
+
+          // Check if it's actually an image search
+          const tbm = params.get("tbm");
+          const udm = params.get("udm");
+          const isImageMode =
+            (tbm && tbm.toLowerCase() === "isch") || udm === "2";
+
+          if (!isImageMode) return null;
+
+          // Canonical: force tbm=isch since it's the most stable
+          return `https://${u.hostname}/search?tbm=isch&q=${encodeURIComponent(
+            q
+          )}`;
         }
 
         function genericClean(u) {
