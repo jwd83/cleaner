@@ -512,9 +512,13 @@
           }
         });
 
-        // support dropping a plain url onto the input
+        // support auto-clean on paste
         input.addEventListener("paste", (ev) => {
-          // let default paste happen, then optionally auto-clean? keep simple: do nothing special
+          setTimeout(() => {
+            if (input.value.trim()) {
+              doCleanAndCopy();
+            }
+          }, 0);
         });
 
         // Make the outbox clickable to copy
